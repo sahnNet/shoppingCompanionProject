@@ -1,1 +1,32 @@
+import telebot
 
+# Build a telegram robot with a registered token
+bot = telebot.TeleBot(token="5328326614:AAEKpInGPpIB4JAp9LPQA5QrxzS5Ho8LMv4")
+
+
+# Check the type and request of the user
+def check_command(command):
+    result = None
+    if command == "/start":
+        result = '''سلام
+من همراه خرید شما هستم😎
+چی نیاز داری؟ بهم بگو🧐'''
+
+    else:
+        pass
+
+    return result
+
+
+# Executive function in response to the user's message
+@bot.message_handler(content_types=['text'])
+def main(user):
+    if not user.from_user.is_bot:
+        result = check_command(user.text)
+        if result is not None:
+            bot.send_message(user.chat.id, result)
+
+
+# Specify the execution cycle for each user
+# Always running
+bot.polling(none_stop=True)
