@@ -1,11 +1,12 @@
 import telebot
+import classifierFind as cff
 
 # Build a telegram robot with a registered token
 bot = telebot.TeleBot(token="5328326614:AAEKpInGPpIB4JAp9LPQA5QrxzS5Ho8LMv4")
 
 
 # Check the type and request of the user
-def check_command(command):
+def check_command(command: str):
     result = None
     if command == "/start":
         result = '''سلام
@@ -13,7 +14,8 @@ def check_command(command):
 چی نیاز داری؟ بهم بگو🧐'''
 
     else:
-        pass
+        intent = cff.get_classification([command])[0]
+        result = cff.get_answer_intent(intent)
 
     return result
 
