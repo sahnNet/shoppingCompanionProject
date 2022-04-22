@@ -87,7 +87,7 @@ def creat_tables():
     creat_bill_order_table()
 
 
-def add_user(user_id):
+def add_user(user_id:str):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
     cursor.execute(f"INSERT INTO {USER_TABLE_NAME} IF NOT EXISTS  VALUES (:UserID)",
