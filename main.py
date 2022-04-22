@@ -1,8 +1,10 @@
 import telebot
 import classifierFind as cff
+import database as db
 
 # Build a telegram robot with a registered token
 bot = telebot.TeleBot(token="5328326614:AAEKpInGPpIB4JAp9LPQA5QrxzS5Ho8LMv4")
+orders = []
 
 
 # Check the type and request of the user
@@ -15,7 +17,12 @@ def check_command(command: str):
 
     else:
         intent = cff.get_classification([command])[0]
-        result = cff.get_answer_intent(intent)
+        if intent == "دونه ای" or intent == "کیلویی":
+            orders.append(command)
+        if len(orders) == 2:
+            pass
+        else:
+            result = cff.get_answer_intent(intent)
 
     return result
 
