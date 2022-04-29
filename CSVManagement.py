@@ -5,11 +5,10 @@ import csv
 def update_file_csv(path_in: str, path_to: str):
     op = open(path_in, "r")
     dt = csv.DictReader(op)
-    print(dt)
     up_dt = []
     for r in dt:
         print(r)
-        row = {'intent': r['intent'], 'value': r['value']}
+        row = {'intent': r['\ufeffintent'], 'value': r['value']}
         up_dt.append(row)
     print(up_dt)
     op.close()
