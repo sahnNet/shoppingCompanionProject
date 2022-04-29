@@ -13,7 +13,7 @@ def update_file_csv(path_in: str, path_to: str):
         up_dt.append(row)
     print(up_dt)
     op.close()
-    op = open(path_to, "w", newline='')
+    op = open(path_to, "a", newline='')
     headers = ['intent', 'value']
     data = csv.DictWriter(op, delimiter=',', fieldnames=headers)
     data.writerow(dict((heads, heads) for heads in headers))
