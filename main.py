@@ -8,7 +8,7 @@ orders = []
 
 
 # Check the type and request of the user
-def check_command(command: str):
+def check_command(command: str, user_chat_id: int):
     result = None
     if command == "/start":
         result = '''سلام
@@ -31,7 +31,7 @@ def check_command(command: str):
 @bot.message_handler(content_types=['text'])
 def main(user):
     if not user.from_user.is_bot:
-        result = check_command(user.text)
+        result = check_command(user.text, user.chat.id)
         if result is not None:
             bot.send_message(user.chat.id, result)
 
