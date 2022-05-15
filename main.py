@@ -17,8 +17,9 @@ def check_command(command: str, user_chat_id: int):
 
     else:
         intent = cff.get_classification([command])[0]
-        if intent == "دونه ای" or intent == "کیلویی":
+        if (intent == "دونه ای" or intent == "کیلویی") or (intent == "عدد" and len(orders) == 1):
             orders.append(command)
+            
         if len(orders) == 2:
             pass
         else:
