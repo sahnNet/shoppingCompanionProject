@@ -76,13 +76,12 @@ def add_user(user_chat_id: int):
     cursor = conn.cursor()
     try:
         id = get_user_id(user_chat_id)
-        conn.commit()
-        result = id.fetchone()[0]
+        result = id
     except:
         cursor.execute(f"INSERT INTO {USER_TABLE_NAME} ([User Chat ID]) VALUES ({user_chat_id})")
-        id = get_user_id(user_chat_id)
         conn.commit()
-        result = id.fetchone()[0]
+        id = get_user_id(user_chat_id)
+        result = id
 
     conn.close()
 
@@ -109,13 +108,12 @@ def add_bill(user_id: int):
     cursor = conn.cursor()
     try:
         id = get_bill_id(user_id)
-        conn.commit()
-        result = id.fetchone()[0]
+        result = id
     except:
         cursor.execute(f"INSERT INTO {BILL_TABLE_NAME} ([User ID],status) VALUES ({user_id},'open')")
-        id = get_bill_id(user_id)
         conn.commit()
-        result = id.fetchone()[0]
+        id = get_bill_id(user_id)
+        result = id
 
     conn.close()
 
@@ -172,14 +170,13 @@ def add_order(bill_id: int, commodity: str, value: str):
     cursor = conn.cursor()
     try:
         id = get_order_id(bill_id, commodity, value)
-        conn.commit()
-        result = id.fetchone()[0]
+        result = id
     except:
         cursor.execute(
             f"INSERT INTO {ORDER_TABLE_NAME} ([Bill ID],Commodity,Value) VALUES ({bill_id},{commodity},{value})")
-        id = get_order_id(bill_id, commodity, value)
         conn.commit()
-        result = id.fetchone()[0]
+        id = get_order_id(bill_id, commodity, value)
+        result = id
 
     conn.close()
 
