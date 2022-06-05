@@ -154,6 +154,19 @@ def get_order_id(bill_id: int, commodity: str, value: str):
     return result
 
 
+def get_orders_by_bill_id(bill_id: int):
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+    id = cursor.execute(
+        f"SELECT Commodity,Value FROM {ORDER_TABLE_NAME} WHERE [Bill ID] = {bill_id}")
+    conn.commit()
+    result = id.fetchall()
+
+    conn.close()
+
+    return result
+
+
 def add_order(bill_id: int, commodity: str, value: str):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
@@ -177,4 +190,3 @@ def add_order(bill_id: int, commodity: str, value: str):
 if __name__ == '__main__':
     creat_tables()
     # print(add_user(158))
-
