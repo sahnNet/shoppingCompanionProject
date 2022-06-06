@@ -59,12 +59,9 @@ def creat_tables():
 def get_user_id(user_chat_id: int):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
-    try:
-        id = cursor.execute(f"SELECT ID FROM {USER_TABLE_NAME} WHERE [User Chat ID] = {user_chat_id}")
-        conn.commit()
-        result = id.fetchone()[0]
-    except:
-        raise Exception
+    id = cursor.execute(f"SELECT ID FROM {USER_TABLE_NAME} WHERE [User Chat ID] = {user_chat_id}")
+    conn.commit()
+    result = id.fetchone()[0]
 
     conn.close()
 
@@ -91,12 +88,21 @@ def add_user(user_chat_id: int):
 def get_bill_id(user_id: int):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
-    try:
-        id = cursor.execute(f"SELECT ID FROM {BILL_TABLE_NAME} WHERE [User ID] = {user_id} AND status = 'open'")
-        conn.commit()
-        result = id.fetchone()[0]
-    except:
-        raise Exception
+    id = cursor.execute(f"SELECT ID FROM {BILL_TABLE_NAME} WHERE [User ID] = {user_id} AND status = 'open'")
+    conn.commit()
+    result = id.fetchone()[0]
+
+    conn.close()
+
+    return result
+
+
+def get_close_bills_id(user_id: int):
+    conn = sqlite3.connect(DATABASE_NAME)
+    cursor = conn.cursor()
+    id = cursor.execute(f"SELECT ID FROM {BILL_TABLE_NAME} WHERE [User ID] = {user_id} AND status = 'close'")
+    conn.commit()
+    result = id.fetchall()
 
     conn.close()
 
@@ -139,13 +145,10 @@ def close_bill(bill_id: int):
 def get_order_id(bill_id: int, commodity: str, value: str):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
-    try:
-        id = cursor.execute(
-            f"SELECT ID FROM {ORDER_TABLE_NAME} WHERE [Bill ID] = {bill_id} AND Commodity = {commodity} AND Value = {value}")
-        conn.commit()
-        result = id.fetchone()[0]
-    except:
-        raise Exception
+    id = cursor.execute(f"SELECT ID FROM 'order' WHERE [Bill ID] = ? AND Commodity = ? AND Value = ?",
+                        (bill_id, commodity, value))
+    conn.commit()
+    result = id.fetchone()[0]
 
     conn.close()
 
@@ -155,8 +158,7 @@ def get_order_id(bill_id: int, commodity: str, value: str):
 def get_orders_by_bill_id(bill_id: int):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
-    id = cursor.execute(
-        f"SELECT Commodity,Value FROM {ORDER_TABLE_NAME} WHERE [Bill ID] = {bill_id}")
+    id = cursor.execute(f"SELECT Commodity,Value FROM 'order' WHERE [Bill ID] = ?", (bill_id,))
     conn.commit()
     result = id.fetchall()
 
@@ -172,8 +174,7 @@ def add_order(bill_id: int, commodity: str, value: str):
         id = get_order_id(bill_id, commodity, value)
         result = id
     except:
-        cursor.execute(
-            f"INSERT INTO {ORDER_TABLE_NAME} ([Bill ID],Commodity,Value) VALUES ({bill_id},{commodity},{value})")
+        cursor.execute(f"INSERT INTO 'order' ([Bill ID],Commodity,Value) VALUES (?,?,?)", (bill_id, commodity, value))
         conn.commit()
         id = get_order_id(bill_id, commodity, value)
         result = id
@@ -185,5 +186,9 @@ def add_order(bill_id: int, commodity: str, value: str):
 
 # Only when this is the original executable file is the condition true
 if __name__ == '__main__':
-    creat_tables()
+    # creat_tables()
     # print(add_user(158))
+    # print(add_order(1, commodity="پیاز", value="دو کیلو"))
+    # print(get_order_id(1, commodity="پیاز", value="دو کیلو"))
+    # print(get_bill_id(1))
+    pass
