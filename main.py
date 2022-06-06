@@ -23,8 +23,8 @@ def check_command(command: str, user_chat_id: int):
             orders.append(command)
 
         elif (intent == "بله" or command == "بله") and flag:
-            user_id = db.get_user_id(user_chat_id)
-            bill_id = db.get_bill_id(user_id)
+            user_id = db.add_user(user_chat_id)
+            bill_id = db.add_bill(user_id)
             db.close_bill(bill_id)
             result = f'''فاکتور ثبت شد
             کد فاکتور : {bill_id}'''
@@ -50,8 +50,8 @@ def check_command(command: str, user_chat_id: int):
         elif intent == "لیست خرید" or command == "لیست خرید" or command == "فاکتور":
             result = ''
             flag = True
-            user_id = db.get_user_id(user_chat_id)
-            bill_id = db.get_bill_id(user_id)
+            user_id = db.add_user(user_chat_id)
+            bill_id = db.add_bill(user_id)
 
             for o in db.get_orders_by_bill_id(bill_id):
                 result += f"{o[0]} : {o[1]}\n"
@@ -62,7 +62,7 @@ def check_command(command: str, user_chat_id: int):
 
         elif intent == "تاریخچه لیست های خرید":
             result = ''
-            user_id = db.get_user_id(user_chat_id)
+            user_id = db.add_user(user_chat_id)
             bills_id = db.get_close_bills_id(user_id)
 
             for bill_id in bills_id:
