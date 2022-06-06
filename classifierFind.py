@@ -1,5 +1,6 @@
 import random
 import pandas as pd
+import pandas.core.frame
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 
@@ -9,10 +10,18 @@ def read_csv_file(path: str):
     return pd.read_csv(path, sep=',', encoding="utf8")
 
 
-# Find and return category messages
-def get_classification(messages: list):
-    data = read_csv_file('questions.csv')
+def find_equal_method(data: pandas.core.frame.DataFrame, messages: list):
+    result = None
+    msg = messages[0]
 
+    for d in data.values:
+        if d[1] == msg:
+            result = d[0]
+            break
+    return result
+
+
+def find_by_naive_bayes_method(data: pandas.core.frame.DataFrame, messages: list):
     vectorizer = CountVectorizer()
     counts = vectorizer.fit_transform(data['value'].values)
     targets = data['intent'].values
@@ -24,6 +33,18 @@ def get_classification(messages: list):
     predictions = classifier.predict(messages_count)
 
     return predictions
+
+
+# Find and return category messages
+def get_classification(messages: list):
+    data = read_csv_file('questions.csv')
+
+    result = find_equal_method(data, messages)
+
+    if result is None:
+        result = find_by_naive_bayes_method(data, messages)[0]
+
+    return result
 
 
 # Random selection of filtered categories
@@ -43,5 +64,6 @@ def get_answer_intent(intent: str):
 # Only when this is the original executable file is the condition true
 # To test this script
 if __name__ == '__main__':
-    result = random_choose_with_intent('hate')
+    # result = random_choose_with_intent('hate')
+    result = get_classification(["سلام وقت بخیر"])
     print(result)
